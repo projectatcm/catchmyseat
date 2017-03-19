@@ -14,7 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.codemagos.catchmyride.Spstore.SharedPreferenceStore;
+import com.codemagos.catchmyride.Spstore.SharedPreferencesStore;
+import com.codemagos.catchmyride.Webservice.WebService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,17 +27,32 @@ public class LoginActivity extends AppCompatActivity {
     Button button_login;
     LinearLayout btn_driver, btn_passenger;
     String email, password;
-    SharedPreferenceStore spStore;
+    SharedPreferencesStore spStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //Intent i = new Intent(this, RegistrationService.class);
-        //startService(i);
+        spStore = new SharedPreferencesStore(getApplicationContext());
+        text_new_account = (TextView) findViewById(R.id.text_new_account);
+        text_forget = (TextView) findViewById(R.id.text_forget);
+        input_email = (EditText) findViewById(R.id.input_email);
+        input_passord = (EditText) findViewById(R.id.input_password);
+        button_login = (Button) findViewById(R.id.button_login);
 
-        init();
+        if (!spStore.getID().equals("")) {
+            Intent i;
+
+            if(spStore.getType().equals("driver")){
+                i = new Intent(getApplicationContext(), DriverHomeActivity.class);
+            }else{
+                 i = new Intent(getApplicationContext(), PassengerHomeActivity.class);
+            }
+            //  startActivity(i);
+            finish();
+        }
+
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Clicked Forget", Toast.LENGTH_LONG).show();
             }
         });
+
         text_new_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,86 +83,35 @@ public class LoginActivity extends AppCompatActivity {
                 btn_driver = (LinearLayout) dialog.findViewById(R.id.btn_driver);
                 btn_passenger = (LinearLayout) dialog.findViewById(R.id.btn_passenger);
 
-
-
                 btn_driver.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       // startActivity(new Intent(getApplicationContext(), DriverRegisterActivity.class));
+                        startActivity(new Intent(getApplicationContext(), DriverRegisterActivity.class));
                     }
                 });
 
                 btn_passenger.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       // startActivity(new Intent(getApplicationContext(), PassengerRegisterActivity.class));
+                        startActivity(new Intent(getApplicationContext(), PassengerRegisterActivity.class));
                     }
                 });
             }
         });
     }
 
-    public void init() {
-        spStore = new SharedPreferenceStore(getApplicationContext());
-        text_new_account = (TextView) findViewById(R.id.text_new_account);
-        text_forget = (TextView) findViewById(R.id.text_forget);
-        input_email = (EditText) findViewById(R.id.input_email);
-        input_passord = (EditText) findViewById(R.id.input_password);
-        button_login = (Button) findViewById(R.id.button_login);
 
-        if (!spStore.getLoginID().equals("")) {
-            Intent i;
-
-            if(spStore.getType().equals("driver")){
-                //i = new Intent(getApplicationContext(), DriverHomeActivity.class);
-            }else{
-               // i = new Intent(getApplicationContext(), PassengerHomeActivity.class);
-            }
-          //  startActivity(i);
-            finish();
-        }
-    }
-
-
-    protected class BackTask extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            Toast.makeText(getApplicationContext(), "Fetching data....", Toast.LENGTH_SHORT).show();
-        }
+    protected class BackTask extends AsyncTask<String,String,String>{
 
         @Override
         protected String doInBackground(String... params) {
-          //  return WebService.login(email, password);
-            return null;
+            return WebService.userLogin(email,password);
+
         }
 
         @Override
         protected void onPostExecute(String response) {
-            Log.w("Server ->", response);
-            try {
-                JSONObject json = new JSONObject(response);
-                if (json.getString("status").equals("success")) {
-                    String user_id = json.getString("user_id");
-                    String user_name = json.getString("user_name");
-                    String user_type = json.getString("user_type");
-                    spStore.setLogin(user_id, user_name,user_type);
-
-                    Toast.makeText(getApplicationContext(), "Welcome !", Toast.LENGTH_LONG).show();
-
-                    if (user_type.equals("driver")) {
-                     //   startActivity(new Intent(getApplicationContext(), DriverHomeActivity.class));
-                    } else {
-                       // startActivity(new Intent(getApplicationContext(), PassengerHomeActivity.class));
-                    }
-
-                    finish();
-
-                } else {
-                    Toast.makeText(getApplicationContext(), "Username or Password Error\nPlease Try Again", Toast.LENGTH_LONG).show();
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            Log.e("login",response);
 
         }
     }

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1025529947432",
+    "firebase_url": "https://catchmyride-ec0ad.firebaseio.com",
+    "project_id": "catchmyride-ec0ad",
+    "storage_bucket": "catchmyride-ec0ad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1025529947432:android:7d620617072d07a6",
+        "android_client_info": {
+          "package_name": "com.codemagos.catchmyride"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1025529947432-fucfaamuk7p06on4t83ms5f2ou9v41qr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.codemagos.catchmyride",
+            "certificate_hash": "4b071d53053b90658556ede0ae0096b869c4f1d6"
+          }
+        },
+        {
+          "client_id": "1025529947432-j5drie4ru4bu3204klif9vl2n1ss3v2q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5DoBeSeheTIpAn3ryC2U8EhveFDYBOAo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1025529947432-j5drie4ru4bu3204klif9vl2n1ss3v2q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
