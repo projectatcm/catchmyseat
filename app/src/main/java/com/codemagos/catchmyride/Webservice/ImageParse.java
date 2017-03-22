@@ -21,7 +21,14 @@ public class ImageParse {
         //System.out.println(base64image);
         return base64image;
     }
-
+    public static String imageToBase64(Bitmap image){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100,baos);
+        byte [] imageByteArray =baos.toByteArray();
+        String base64image = Base64.encodeToString(imageByteArray, Base64.DEFAULT);
+        //System.out.println(base64image);
+        return base64image;
+    }
     public static Bitmap base64ToImage(String base64string) throws Exception {
 
         byte[] decodedString = Base64.decode(base64string, Base64.NO_WRAP);

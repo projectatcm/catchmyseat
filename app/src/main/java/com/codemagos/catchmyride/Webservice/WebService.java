@@ -22,7 +22,7 @@ import java.net.URLEncoder;
 public class WebService {
 
 /*    static String reg_url = "http://codemagos.in/Mybook/index.php";*/
-    static String SITE_URL = "http://10.0.2.2/project/catchmyseat_server/";
+    static String SITE_URL = "http://192.168.43.170/project/catchmyseat_server/webservice/";
 
     public static String postData(String action_URL, String data) {
         String responce = "";
@@ -101,43 +101,85 @@ public class WebService {
         return responce;
     }
 
-    public static String userRegistration(String name,String email,String mobile,String password,String aadhar,String device_id, String fcm_id) {
+    public static String passengerRegistration(String name,String mobile,String password,String avatar,String device_id,String fcm_id) {
         Log.w("-->", "in uer login web service method");
         String data = null;
         try {
             data = URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8") + "&" +
-                    URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8") + "&" +
                     URLEncoder.encode("mobile", "UTF-8") + "=" + URLEncoder.encode(mobile, "UTF-8") + "&" +
                     URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8") + "&" +
-                    URLEncoder.encode("aadhar", "UTF-8") + "=" + URLEncoder.encode(aadhar, "UTF-8") + "&" +
+                    URLEncoder.encode("avatar", "UTF-8") + "=" + URLEncoder.encode(avatar, "UTF-8") + "&" +
                     URLEncoder.encode("device_id", "UTF-8") + "=" + URLEncoder.encode(device_id, "UTF-8") + "&" +
                     URLEncoder.encode("fcm_id", "UTF-8") + "=" + URLEncoder.encode(fcm_id, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
-        return postData("webservice.php", data);
+        return postData("passenger_registration.php", data);
 
     }
-    public static String userLogin(String email, String password) {
+    public static String driverRegistration(String name,String mobile,String password,String avatar,String device_id,String fcm_id,
+                                            String licence,String rc_book,String vehicle_no,String vehicle_type,String vehicle_name,
+                                            String vehicle_image){
+        Log.w("-->", "in uer login web service method");
+        String data = null;
+        try {
+            data = URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(name, "UTF-8") + "&" +
+                    URLEncoder.encode("mobile", "UTF-8") + "=" + URLEncoder.encode(mobile, "UTF-8") + "&" +
+                    URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8") + "&" +
+                    URLEncoder.encode("avatar", "UTF-8") + "=" + URLEncoder.encode(avatar, "UTF-8") + "&" +
+                    URLEncoder.encode("device_id", "UTF-8") + "=" + URLEncoder.encode(device_id, "UTF-8") + "&" +
+                    URLEncoder.encode("fcm_id", "UTF-8") + "=" + URLEncoder.encode(fcm_id, "UTF-8") + "&" +
+                    URLEncoder.encode("licence", "UTF-8") + "=" + URLEncoder.encode(licence, "UTF-8") + "&" +
+                    URLEncoder.encode("rc_book", "UTF-8") + "=" + URLEncoder.encode(rc_book, "UTF-8") + "&" +
+                    URLEncoder.encode("vehicle_no", "UTF-8") + "=" + URLEncoder.encode(vehicle_no, "UTF-8") + "&" +
+                    URLEncoder.encode("vehicle_type", "UTF-8") + "=" + URLEncoder.encode(vehicle_type, "UTF-8") + "&" +
+                    URLEncoder.encode("vehicle_name", "UTF-8") + "=" + URLEncoder.encode(vehicle_name, "UTF-8") + "&" +
+                    URLEncoder.encode("vehicle_image", "UTF-8") + "=" + URLEncoder.encode(vehicle_image, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return postData("driver_registration.php", data);
+
+    }
+    public static String userLogin(String mobile, String password) {
         Log.w("-->", "in user login web service method");
         String data = null;
         try {
-            data = URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode("login_check", "UTF-8") + "&" +
-                    URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8") + "&" +
+            data =  URLEncoder.encode("mobile", "UTF-8") + "=" + URLEncoder.encode(mobile, "UTF-8") + "&" +
                     URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
-        return postData("webservice.php", data);
+        return postData("login.php", data);
 
     }
+    public static String updateLocation(String driver_id, Double latitude, Double longitude) {
+        String data = "";
+        try {
+            data = URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode("update_location", "UTF-8") + "&" +
+                    URLEncoder.encode("driver_id", "UTF-8") + "=" + URLEncoder.encode(driver_id, "UTF-8") + "&" +
+                    URLEncoder.encode("latitude", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(latitude), "UTF-8") + "&" +
+                    URLEncoder.encode("longitude", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(longitude), "UTF-8");
 
-    public static String getNews() {
-        String url = "webservice.php";
-        String responce = getData(url);
-        return responce;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return postData("update_driver_location.php", data);
+    }
+    public static String getDriverStatus(String driver_id) {
+        String data = "";
+        try {
+            data = URLEncoder.encode("driver_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(driver_id), "UTF-8");
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return postData("get_driver_status.php", data);
     }
 
 

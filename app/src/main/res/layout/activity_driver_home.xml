@@ -9,5 +9,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.codemagos.catchmyride.DriverHomeActivity">
-
+    <ToggleButton
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textOn="Stop Ride"
+        android:textOff="Start Ride"
+        android:id="@+id/toggle_ride"
+        />
 </RelativeLayout>

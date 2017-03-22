@@ -22,22 +22,21 @@ import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
     TextView text_new_account, text_forget;
-    EditText input_email;
+    EditText input_mobile;
     EditText input_passord;
     Button button_login;
-    LinearLayout btn_driver, btn_passenger;
-    String email, password;
+    Button btn_driver, btn_passenger;
+    String mobile, password;
     SharedPreferencesStore spStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         spStore = new SharedPreferencesStore(getApplicationContext());
         text_new_account = (TextView) findViewById(R.id.text_new_account);
         text_forget = (TextView) findViewById(R.id.text_forget);
-        input_email = (EditText) findViewById(R.id.input_email);
+        input_mobile = (EditText) findViewById(R.id.input_mobile);
         input_passord = (EditText) findViewById(R.id.input_password);
         button_login = (Button) findViewById(R.id.button_login);
 
@@ -49,14 +48,14 @@ public class LoginActivity extends AppCompatActivity {
             }else{
                  i = new Intent(getApplicationContext(), PassengerHomeActivity.class);
             }
-            //  startActivity(i);
+          startActivity(i);
             finish();
         }
 
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                email = input_email.getText().toString();
+                mobile = input_mobile.getText().toString();
                 password = input_passord.getText().toString();
                 BackTask bb = new BackTask();
                 bb.execute();
@@ -73,20 +72,19 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Clicked New Account", Toast.LENGTH_LONG).show();
-                Dialog dialog = new Dialog(LoginActivity.this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+                Dialog dialog = new Dialog(LoginActivity.this);
                 // dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.setTitle("Choose Account Type");
                 dialog.setContentView(R.layout.dialog_new_account);
                 dialog.show();
-                DisplayMetrics metrics = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                dialog.getWindow().setLayout(metrics.widthPixels, metrics.heightPixels);
-                btn_driver = (LinearLayout) dialog.findViewById(R.id.btn_driver);
-                btn_passenger = (LinearLayout) dialog.findViewById(R.id.btn_passenger);
+
+                btn_driver = (Button) dialog.findViewById(R.id.btn_driver);
+                btn_passenger = (Button) dialog.findViewById(R.id.btn_passenger);
 
                 btn_driver.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(getApplicationContext(), DriverRegisterActivity.class));
+                     startActivity(new Intent(getApplicationContext(), DriverRegisterActivity.class));
                     }
                 });
 
@@ -105,13 +103,39 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            return WebService.userLogin(email,password);
+            return WebService.userLogin(mobile,password);
 
         }
 
         @Override
         protected void onPostExecute(String response) {
             Log.e("login",response);
+            try {
+                JSONObject responseObject = new JSONObject(response);
+                if (responseObject.getString("status").equals("success")) {
+                    Toast.makeText(getApplicationContext(), responseObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    JSONObject data = new JSONObject(responseObject.getString("data"));
+                    String type = data.getString("type");
+                    Intent intent;
+                    if(type.equals("driver")){
+                        if(data.getString("status").equals("0")){
+                            intent = new Intent(getApplicationContext(), NotVerifiedActivity.class);
+                        }else {
+                            intent = new Intent(getApplicationContext(), DriverHomeActivity.class);
+                        }
+                        }else{
+                        intent = new Intent(getApplicationContext(), PassengerHomeActivity.class);
+                    }
+                    spStore.setLogData(data.getString("id"), data.getString("name"),type);
+                    startActivity(intent);
+                }else{
+                    // if the response if error
+                    Toast.makeText(getApplicationContext(), responseObject.getString("message"), Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.d("ERROR : ", response);
+            }
 
         }
     }
