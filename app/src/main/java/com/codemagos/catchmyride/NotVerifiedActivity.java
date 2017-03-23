@@ -63,6 +63,7 @@ public class NotVerifiedActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), responseObject.getString("message"), Toast.LENGTH_SHORT).show();
                     spStore.isVerified(true);
                     startActivity(new Intent(getApplicationContext(), DriverHomeActivity.class));
+                    finish();
 
 
                 } else {

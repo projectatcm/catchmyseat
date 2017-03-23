@@ -18,17 +18,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.codemagos.catchmyride.Location.AndroidLocationServices;
+import com.codemagos.catchmyride.Misc.LoadingDialog;
 import com.codemagos.catchmyride.Spstore.SharedPreferencesStore;
 import com.codemagos.catchmyride.Webservice.WebService;
 
 public class PassengerHomeActivity extends AppCompatActivity {
     SharedPreferencesStore spStore;
     Location location;
+    Button btn_search;
     Double latitude;
     Double longitude;
     WebView webView;
+    boolean locationFinderReady = false;
     LocationManager locationManager;
 
     @Override
@@ -36,6 +41,7 @@ public class PassengerHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_passenger_home);
         spStore = new SharedPreferencesStore(getApplicationContext());
+        btn_search  = (Button) findViewById(R.id.btn_search);
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -48,16 +54,30 @@ public class PassengerHomeActivity extends AppCompatActivity {
             return;
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                1000, 5, listener);
-webView = (WebView) findViewById(R.id.webView);
+                5 * 60 * 1000, 20, listener);
+        LoadingDialog.show(PassengerHomeActivity.this);
+
+        webView = (WebView) findViewById(R.id.webView);
 
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-       // webView.loadUrl(WebService.SITE_URL+"map.php?lat="+10+"&lng="+7);
-
+        // webView.loadUrl(WebService.SITE_URL+"map.php?lat="+10+"&lng="+7);
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(latitude == null){
+                    Toast.makeText(getApplicationContext(),"GPS is not Activated Yet...Searching your Location...",Toast.LENGTH_LONG).show();
+                }else{
+                    Intent locationIntent = new Intent(getApplicationContext(),DriverListAcivity.class);
+                    locationIntent.putExtra("lat",String.valueOf(latitude));
+                    locationIntent.putExtra("lng",String.valueOf(longitude));
+                    startActivity(locationIntent);
+                }
+            }
+        });
     }
 
     private LocationListener listener = new LocationListener() {
@@ -75,14 +95,17 @@ webView = (WebView) findViewById(R.id.webView);
             latitude = location.getLatitude();
             longitude = location.getLongitude();
 
-            Log.e("Latitude",latitude+"");
-            Log.e("Longitude",longitude+"");
-
-            webView.loadUrl(WebService.SITE_URL+"map.php?lat="+latitude+"&lng="+longitude);
-
+            Log.e("Latitude", latitude + "");
+            Log.e("Longitude", longitude + "");
+            locationFinderReady = true;
+            if (locationFinderReady) {
+                LoadingDialog.hide();
+            }
+            webView.loadUrl(WebService.SITE_URL + "map.php?lat=" + latitude + "&lng=" + longitude);
 
 
         }
+
         @Override
         public void onProviderDisabled(String provider) {
             // TODO Auto-generated method stub
@@ -101,6 +124,7 @@ webView = (WebView) findViewById(R.id.webView);
 
         }
     };
+
     private class MyBrowser extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -113,7 +137,7 @@ webView = (WebView) findViewById(R.id.webView);
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.passenger_menu, menu);
+        inflater.inflate(R.menu.menu_inner_with_refresh, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -122,7 +146,12 @@ webView = (WebView) findViewById(R.id.webView);
         switch (item.getItemId()) {
             case R.id.action_logout:
                 spStore.clearLogData();
-                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                finish();
+                break;
+            case R.id.action_refresh:
+                spStore.clearLogData();
+                startActivity(new Intent(getApplicationContext(), PassengerHomeActivity.class));
                 finish();
                 break;
         }
@@ -130,8 +159,5 @@ webView = (WebView) findViewById(R.id.webView);
     }
 
 
-    public void refresh(View v){
-        startActivity(new Intent(getApplicationContext(),PassengerHomeActivity.class));
-        finish();
-    }
+
 }

@@ -182,6 +182,18 @@ public class    WebService {
 
         return postData("get_driver_status.php", data);
     }
+    public static String findDrivers(String latitude,String longitude) {
+        String data = "";
+        try {
+            data =  URLEncoder.encode("latitude", "UTF-8") + "=" + URLEncoder.encode(latitude, "UTF-8") + "&" +
+                    URLEncoder.encode("longitude", "UTF-8") + "=" + URLEncoder.encode(longitude, "UTF-8");
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return postData("find_driver.php", data);
+    }
 
 
 

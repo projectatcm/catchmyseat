@@ -4,31 +4,11 @@
     android:id="@+id/activity_passenger_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+
 android:orientation="vertical"
-    android:paddingTop="@dimen/activity_vertical_margin"
+
     tools:context="com.codemagos.catchmyride.PassengerHomeActivity">
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_alignParentTop="true"
-    android:layout_height="wrap_content"
-    android:id="@+id/linearLayout">
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter Destination"
-        />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Search"
-        android:onClick="refresh"
-        android:id="@+id/btn_search"
-        />
-</LinearLayout>
+
     <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -39,4 +19,28 @@ android:orientation="vertical"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/linearLayout" />
+    <LinearLayout
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
+
+        android:padding="16dp"
+        android:id="@+id/linearLayout">
+
+        <Button
+            android:textSize="12sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Catch A Ride"
+
+android:background="@color/colorWhite"
+            android:onClick="refresh"
+            android:id="@+id/btn_search"
+            />
+    </LinearLayout>
 </RelativeLayout>

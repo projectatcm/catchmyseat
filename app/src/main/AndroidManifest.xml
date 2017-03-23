@@ -38,9 +38,10 @@
 
         <activity android:name=".DriverRegisterActivity" />
 
-        <service android:name=".Location.AndroidLocationServices"></service>
+        <service android:name=".Location.AndroidLocationServices" />
 
-        <activity android:name=".NotVerifiedActivity"></activity>
+        <activity android:name=".NotVerifiedActivity" />
+        <activity android:name=".DriverListAcivity"></activity>
     </application>
 
 </manifest>
