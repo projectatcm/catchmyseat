@@ -14,7 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codemagos.catchmyride.Misc.LoadingDialog;
 import com.codemagos.catchmyride.Spstore.SharedPreferencesStore;
+import com.codemagos.catchmyride.Utils.Settings;
 import com.codemagos.catchmyride.Webservice.WebService;
 
 import org.json.JSONException;
@@ -42,9 +44,12 @@ public class LoginActivity extends AppCompatActivity {
 
         if (!spStore.getID().equals("")) {
             Intent i;
-
             if(spStore.getType().equals("driver")){
-                i = new Intent(getApplicationContext(), DriverHomeActivity.class);
+                if(spStore.isVerified()) {
+                    i = new Intent(getApplicationContext(), DriverHomeActivity.class);
+                }else{
+                    i = new Intent(getApplicationContext(), NotVerifiedActivity.class);
+                }
             }else{
                  i = new Intent(getApplicationContext(), PassengerHomeActivity.class);
             }
@@ -100,16 +105,22 @@ public class LoginActivity extends AppCompatActivity {
 
 
     protected class BackTask extends AsyncTask<String,String,String>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            LoadingDialog.show(LoginActivity.this);
+        }
 
         @Override
         protected String doInBackground(String... params) {
-            return WebService.userLogin(mobile,password);
+            return WebService.userLogin(mobile,password, Settings.getFCMToken());
 
         }
 
         @Override
         protected void onPostExecute(String response) {
             Log.e("login",response);
+            LoadingDialog.hide();
             try {
                 JSONObject responseObject = new JSONObject(response);
                 if (responseObject.getString("status").equals("success")) {
@@ -119,6 +130,7 @@ public class LoginActivity extends AppCompatActivity {
                     Intent intent;
                     if(type.equals("driver")){
                         if(data.getString("status").equals("0")){
+                            spStore.isVerified(false);
                             intent = new Intent(getApplicationContext(), NotVerifiedActivity.class);
                         }else {
                             intent = new Intent(getApplicationContext(), DriverHomeActivity.class);

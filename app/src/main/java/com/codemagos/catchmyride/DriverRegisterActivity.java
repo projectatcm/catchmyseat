@@ -175,7 +175,8 @@ public class DriverRegisterActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), responseObject.getString("message"), Toast.LENGTH_SHORT).show();
                     JSONObject data = new JSONObject(responseObject.getString("data"));
                     spStore.setLogData(data.getString("id"), data.getString("name"),"driver");
-                    Intent intent = new Intent(getApplicationContext(),DriverHomeActivity.class);
+                    Intent intent = new Intent(getApplicationContext(),NotVerifiedActivity.class);
+                    spStore.isVerified(false);
                     startActivity(intent);
                     finish();
                 }else{

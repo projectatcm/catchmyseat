@@ -28,6 +28,16 @@ public class SharedPreferencesStore {
         editor.commit();
     }
 
+    public void isVerified(boolean isVerified){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("verified", isVerified);
+    }
+
+    public boolean isVerified(){
+        return sharedPreferences.getBoolean("verified",false);
+    }
+
+
     public String getID() {
         return sharedPreferences.getString("id", "");
     }

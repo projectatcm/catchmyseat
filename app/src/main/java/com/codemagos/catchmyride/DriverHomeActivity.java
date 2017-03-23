@@ -1,8 +1,10 @@
 package com.codemagos.catchmyride;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,7 +13,12 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.codemagos.catchmyride.Location.AndroidLocationServices;
+import com.codemagos.catchmyride.Misc.LoadingDialog;
 import com.codemagos.catchmyride.Spstore.SharedPreferencesStore;
+import com.codemagos.catchmyride.Webservice.WebService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class DriverHomeActivity extends AppCompatActivity {
 ToggleButton toggle_ride;
@@ -22,6 +29,7 @@ ToggleButton toggle_ride;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_home);
         toggle_ride = (ToggleButton) findViewById(R.id.toggle_ride);
+
         spStore = new SharedPreferencesStore(getApplicationContext());
         trackerIntent = new Intent(getApplicationContext(), AndroidLocationServices.class);
         toggle_ride.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -60,4 +68,5 @@ ToggleButton toggle_ride;
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

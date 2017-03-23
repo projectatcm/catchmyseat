@@ -19,10 +19,10 @@ import java.net.URLEncoder;
 /**
  * Created by Sree on 01-Oct-15.
  */
-public class WebService {
+public class    WebService {
 
 /*    static String reg_url = "http://codemagos.in/Mybook/index.php";*/
-    static String SITE_URL = "http://192.168.43.170/project/catchmyseat_server/webservice/";
+    public  static String SITE_URL = "http://192.168.1.110/catchmyseat_server/webservice/";
 
     public static String postData(String action_URL, String data) {
         String responce = "";
@@ -143,12 +143,13 @@ public class WebService {
         return postData("driver_registration.php", data);
 
     }
-    public static String userLogin(String mobile, String password) {
+    public static String userLogin(String mobile, String password,String fcm_token) {
         Log.w("-->", "in user login web service method");
         String data = null;
         try {
             data =  URLEncoder.encode("mobile", "UTF-8") + "=" + URLEncoder.encode(mobile, "UTF-8") + "&" +
-                    URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8");
+                    URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8") + "&" +
+                    URLEncoder.encode("fcm_id", "UTF-8") + "=" + URLEncoder.encode(fcm_token, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
