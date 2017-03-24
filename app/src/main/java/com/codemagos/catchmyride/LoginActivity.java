@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         input_mobile = (EditText) findViewById(R.id.input_mobile);
         input_passord = (EditText) findViewById(R.id.input_password);
         button_login = (Button) findViewById(R.id.button_login);
-
+       // startActivity(new Intent(getApplicationContext(),DriverIncommingCall.class));
         if (!spStore.getID().equals("")) {
             Intent i;
             if(spStore.getType().equals("driver")){

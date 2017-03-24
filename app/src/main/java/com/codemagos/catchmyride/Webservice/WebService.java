@@ -194,6 +194,32 @@ public class    WebService {
 
         return postData("find_driver.php", data);
     }
+    public static String callDriver(String user_id,String driver_id,String destination,String latitude,String longitude) {
+        String data = "";
+        try {
+            data =  URLEncoder.encode("user_id", "UTF-8") + "=" + URLEncoder.encode(user_id, "UTF-8") + "&" +
+                    URLEncoder.encode("driver_id", "UTF-8") + "=" + URLEncoder.encode(driver_id, "UTF-8") + "&" +
+                    URLEncoder.encode("destination", "UTF-8") + "=" + URLEncoder.encode(destination, "UTF-8") + "&" +
+                    URLEncoder.encode("latitude", "UTF-8") + "=" + URLEncoder.encode(latitude, "UTF-8") + "&" +
+                    URLEncoder.encode("longitude", "UTF-8") + "=" + URLEncoder.encode(longitude, "UTF-8");
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return postData("call_driver.php", data);
+    }
+    public static String getUserAvatar(String user_id) {
+        String data = "";
+        try {
+            data =  URLEncoder.encode("id", "UTF-8") + "=" + URLEncoder.encode(user_id, "UTF-8");
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return postData("get_user_avatar.php",data);
+    }
+
 
 
 

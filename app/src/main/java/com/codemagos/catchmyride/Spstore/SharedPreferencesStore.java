@@ -31,13 +31,20 @@ public class SharedPreferencesStore {
     public void isVerified(boolean isVerified){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("verified", isVerified);
+        editor.commit();
     }
 
     public boolean isVerified(){
         return sharedPreferences.getBoolean("verified",false);
     }
-
-
+    public void setTempAvatar(String avatar){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+         editor.putString("avatar", avatar);
+         editor.commit();
+    }
+public String getTempAvatar(){
+    return sharedPreferences.getString("avatar","");
+}
     public String getID() {
         return sharedPreferences.getString("id", "");
     }

@@ -41,7 +41,8 @@
         <service android:name=".Location.AndroidLocationServices" />
 
         <activity android:name=".NotVerifiedActivity" />
-        <activity android:name=".DriverListAcivity"></activity>
+        <activity android:name=".DriverListAcivity" />
+        <activity android:name=".DriverIncommingCall" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
     </application>
 
 </manifest>

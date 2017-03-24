@@ -25,8 +25,7 @@ public class NotVerifiedActivity extends AppCompatActivity {
         spStore = new SharedPreferencesStore(getApplicationContext());
         BackTask backTask = new BackTask();
         backTask.execute();
-        Toast.makeText(getApplicationContext(),"id "+spStore.getID(),
-                Toast.LENGTH_LONG).show();
+
     }
 
     public void logout(View v) {
@@ -64,7 +63,6 @@ public class NotVerifiedActivity extends AppCompatActivity {
                     spStore.isVerified(true);
                     startActivity(new Intent(getApplicationContext(), DriverHomeActivity.class));
                     finish();
-
 
                 } else {
                     // if the response if error
