@@ -42,7 +42,9 @@
 
         <activity android:name=".NotVerifiedActivity" />
         <activity android:name=".DriverListAcivity" />
-        <activity android:name=".DriverIncommingCall" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
+        <activity
+            android:name=".DriverIncommingCall"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
     </application>
 
 </manifest>

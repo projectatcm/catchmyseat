@@ -69,4 +69,16 @@ ToggleButton toggle_ride;
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!spStore.isVerified()){
+            finish();
+        }
+        if(spStore.isHired()){
+            toggle_ride.setChecked(false);
+            spStore.isHired(false);
+        }
+    }
 }

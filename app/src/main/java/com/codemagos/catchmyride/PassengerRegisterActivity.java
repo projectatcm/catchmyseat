@@ -122,7 +122,8 @@ public class PassengerRegisterActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), responseObject.getString("message"), Toast.LENGTH_SHORT).show();
                 JSONObject data = new JSONObject(responseObject.getString("data"));
                 spStore.setLogData(data.getString("id"), data.getString("name"),"passenger");
-                Intent intent = new Intent(getApplicationContext(),NotVerifiedActivity.class);
+                Intent intent = new Intent(getApplicationContext(),PassengerHomeActivity.class);
+                spStore.isVerified(true);
                 startActivity(intent);
                 finish();
             }else{

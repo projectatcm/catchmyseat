@@ -133,6 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                             spStore.isVerified(false);
                             intent = new Intent(getApplicationContext(), NotVerifiedActivity.class);
                         }else {
+                            spStore.isVerified(true);
                             intent = new Intent(getApplicationContext(), DriverHomeActivity.class);
                         }
                         }else{

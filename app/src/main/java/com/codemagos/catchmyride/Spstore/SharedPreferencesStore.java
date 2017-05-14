@@ -33,7 +33,14 @@ public class SharedPreferencesStore {
         editor.putBoolean("verified", isVerified);
         editor.commit();
     }
-
+    public boolean isHired(){
+        return sharedPreferences.getBoolean("hire",false);
+    }
+    public void isHired(boolean hire){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("hire", hire);
+        editor.commit();
+    }
     public boolean isVerified(){
         return sharedPreferences.getBoolean("verified",false);
     }

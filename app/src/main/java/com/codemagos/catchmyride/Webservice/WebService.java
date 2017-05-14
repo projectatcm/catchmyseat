@@ -22,7 +22,7 @@ import java.net.URLEncoder;
 public class    WebService {
 
 /*    static String reg_url = "http://codemagos.in/Mybook/index.php";*/
-    public  static String SITE_URL = "http://192.168.1.110/catchmyseat_server/webservice/";
+    public  static String SITE_URL = "http://10.0.2.1/project/catchmyseat_server/webservice/";
 
     public static String postData(String action_URL, String data) {
         String responce = "";
@@ -208,6 +208,19 @@ public class    WebService {
         }
 
         return postData("call_driver.php", data);
+    }
+    public static String callRespose(String driver_id,String user_id,String status) {
+        String data = "";
+        try {
+            data =  URLEncoder.encode("user_id", "UTF-8") + "=" + URLEncoder.encode(user_id, "UTF-8") + "&" +
+                    URLEncoder.encode("driver_id", "UTF-8") + "=" + URLEncoder.encode(driver_id, "UTF-8") + "&" +
+                    URLEncoder.encode("status", "UTF-8") + "=" + URLEncoder.encode(status, "UTF-8");
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return postData("call_response.php", data);
     }
     public static String getUserAvatar(String user_id) {
         String data = "";

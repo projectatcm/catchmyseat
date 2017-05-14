@@ -1,6 +1,7 @@
 package com.codemagos.catchmyride;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,10 +36,11 @@ public class PassengerHomeActivity extends AppCompatActivity {
     WebView webView;
     boolean locationFinderReady = false;
     LocationManager locationManager;
-
+ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        progressDialog = new ProgressDialog(PassengerHomeActivity.this);
         setContentView(R.layout.activity_passenger_home);
         spStore = new SharedPreferencesStore(getApplicationContext());
         btn_search  = (Button) findViewById(R.id.btn_search);
@@ -55,8 +57,9 @@ public class PassengerHomeActivity extends AppCompatActivity {
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                 5 * 60 * 1000, 20, listener);
-        LoadingDialog.show(PassengerHomeActivity.this);
-
+//        LoadingDialog.show(PassengerHomeActivity.this);
+        progressDialog.setMessage("Fetching Location...");
+        progressDialog.show();
         webView = (WebView) findViewById(R.id.webView);
 
         webView.getSettings().setLoadsImagesAutomatically(true);
@@ -99,7 +102,8 @@ public class PassengerHomeActivity extends AppCompatActivity {
             Log.e("Longitude", longitude + "");
             locationFinderReady = true;
             if (locationFinderReady) {
-                LoadingDialog.hide();
+             //   LoadingDialog.hide();
+                progressDialog.hide();
             }
             webView.loadUrl(WebService.SITE_URL + "map.php?lat=" + latitude + "&lng=" + longitude);
 

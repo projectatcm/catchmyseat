@@ -1,15 +1,22 @@
 package com.codemagos.catchmyride;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,9 +34,11 @@ import java.util.ArrayList;
 
 public class DriverListAcivity extends AppCompatActivity {
 Intent locationIntent;
-    String latitude,longitude;
+    String latitude,longitude,destination;
     ListView list_drivers;
     SharedPreferencesStore spStore;
+    ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +47,8 @@ Intent locationIntent;
         locationIntent = getIntent();
         latitude = locationIntent.getStringExtra("lat");
         longitude = locationIntent.getStringExtra("lng");
-        latitude = "10.243569384410671";
-        longitude = "76.26266006787509";
+        destination = "";
+        progressDialog = new ProgressDialog(DriverListAcivity.this);
         list_drivers = (ListView) findViewById(R.id.list_drivers);
         BackTask backTask = new BackTask();
         backTask.execute();
@@ -65,7 +74,7 @@ Intent locationIntent;
             ArrayList type = new ArrayList();
             ArrayList avatar = new ArrayList();
             ArrayList distance = new ArrayList();
-            ArrayList ids = new ArrayList();
+            final ArrayList ids = new ArrayList();
 
             try{
                 JSONObject responseObject = new JSONObject(response);
@@ -81,17 +90,52 @@ Intent locationIntent;
                     }
                     DriverListAdapter driverListAdapter = new DriverListAdapter(DriverListAcivity.this,names,type,distance,avatar);
                     list_drivers.setAdapter(driverListAdapter);
-                    list_drivers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                list_drivers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                        LayoutInflater li = LayoutInflater.from(getApplicationContext());
+                        final View dialogView = li.inflate(R.layout.dialog_custom_input, null);
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DriverListAcivity.this);
+                        // set title
+                        alertDialogBuilder.setTitle("Custom Dialog");
+                        // set custom dialog icon
+                        // set custom_dialog.xml to alertdialog builder
+                        alertDialogBuilder.setView(dialogView);
+                        final EditText txt_destination = (EditText) dialogView
+                                .findViewById(R.id.txt_destination);
+                        // set dialog message
+                        alertDialogBuilder
+                                .setCancelable(false)
+                                .setPositiveButton("OK",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog,
+                                                                int id) {
+                                                destination = txt_destination.getText().toString();
+                                                if(!destination.equals("")) {
+                                                    CallBackTask callBackTask = new CallBackTask();
+                                                    callBackTask.execute(spStore.getID(), ids.get(position).toString(), destination);
+                                                    Toast.makeText(getApplicationContext(), ids.get(position).toString(), Toast.LENGTH_SHORT).show();
+                                                }
+                                                // get user input and set it to etOutput
+                                                // edit text
 
-                        }
+                                            }
+                                        })
+                                .setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog,
+                                                                int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        // show it
+                        alertDialog.show();
 
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-
-                        }
-                    });
+                    }
+                });
                 }else{
                     // if the response if error
                     Toast.makeText(getApplicationContext(), responseObject.getString("message"), Toast.LENGTH_SHORT).show();
@@ -126,6 +170,42 @@ Intent locationIntent;
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    protected class CallBackTask extends AsyncTask<String,String,String>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setMessage("Calling Driver");
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return WebService.callDriver(params[0],params[1], params[2],latitude,longitude);
+
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            Log.e("login",response);
+            progressDialog.hide();
+            LoadingDialog.hide();
+            try {
+                JSONObject responseObject = new JSONObject(response);
+                if (responseObject.getString("status").equals("success")) {
+                    Toast.makeText(getApplicationContext(), responseObject.getString("message"), Toast.LENGTH_SHORT).show();
+
+                }else{
+                    // if the response if error
+                    Toast.makeText(getApplicationContext(), responseObject.getString("message"), Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.d("ERROR : ", response);
+            }
+
+        }
     }
 
 
