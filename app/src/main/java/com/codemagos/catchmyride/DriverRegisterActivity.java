@@ -36,7 +36,7 @@ public class DriverRegisterActivity extends AppCompatActivity {
     final static int RCBOOK_INTENT = 103;
 
     String name, mobile, password, re_password, vehicle_no, vehicle_name, vehicle_type, avatar = "", rc_book = "", licence = "", vehicle_image = "";
-    String vehicle_types[] = {"Car", "Bus", "Auto Rickshaw"};
+    String vehicle_types[] = {"Car", "Auto Rickshaw"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

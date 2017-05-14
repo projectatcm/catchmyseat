@@ -19,7 +19,7 @@ import java.net.URLEncoder;
 /**
  * Created by Sree on 01-Oct-15.
  */
-public class    WebService {
+public class  WebService {
 
 /*    static String reg_url = "http://codemagos.in/Mybook/index.php";*/
     public  static String SITE_URL = "http://10.0.2.1/project/catchmyseat_server/webservice/";
